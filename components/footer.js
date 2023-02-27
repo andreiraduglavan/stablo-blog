@@ -1,8 +1,6 @@
 import Container from "@components/container";
 import ThemeSwitch from "@components/themeSwitch";
-import Image from "next/image";
-import { myLoader } from "@utils/all";
-import VercelLogo from "../public/img/vercel.svg";
+import Link from "next/link";
 
 export default function Footer(props) {
   return (
@@ -37,8 +35,14 @@ export default function Footer(props) {
           </a>
         </span>
       </div>
-      <div className="flex items-center justify-end mt-2">
+      <div className="flex flex-row-reverse items-center justify-between mt-2">
         <ThemeSwitch />
+          <Link
+            href="/privacy"
+            rel="noopener"
+          >
+            Privacy Policy
+          </Link>
       </div>
     </Container>
   );

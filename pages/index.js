@@ -7,9 +7,11 @@ import defaultOG from "../public/img/opengraph.jpg";
 import { postquery, configQuery } from "@lib/groq";
 import GetImage from "@utils/getImage";
 import PostList from "@components/postlist";
+import { useSearchContext } from "context/searchContext";
 
 export default function Post(props) {
   const { postdata, siteconfig, preview } = props;
+  const { searchQuery } = useSearchContext()
 
   const router = useRouter();
   //console.log(router.query.category);
@@ -27,6 +29,7 @@ export default function Post(props) {
   const ogimage = siteConfig?.openGraphImage
     ? GetImage(siteConfig?.openGraphImage).src
     : defaultOG.src;
+    
   return (
     <>
       {posts && siteConfig && (
@@ -54,25 +57,46 @@ export default function Post(props) {
             }}
           />
           <Container>
-            <div className="grid gap-10 lg:gap-10 md:grid-cols-2 ">
-              {posts.slice(0, 2).map(post => (
-                <PostList
-                  key={post._id}
-                  post={post}
-                  aspect="landscape"
-                  preloadImage={true}
-                />
-              ))}
+            { searchQuery == '' ?
+              <>
+                <div className="grid gap-10 lg:gap-10 md:grid-cols-2 ">
+                  {posts.slice(0, 2).map(post => (
+                    <PostList
+                      key={post._id}
+                      post={post}
+                      aspect="landscape"
+                      preloadImage={true}
+                    />
+                  ))}
+                </div>
+                <div className="grid gap-10 mt-10 lg:gap-10 md:grid-cols-2 xl:grid-cols-3 ">
+                  {posts.slice(2).map(post => (
+                    <PostList
+                      key={post._id}
+                      post={post}
+                      aspect="landscape"
+                    />
+                  ))}
+                </div>
+              </> :
+              <div className="grid gap-10 mt-10 lg:gap-10 md:grid-cols-2 xl:grid-cols-3 ">
+                {posts
+                  .filter((post) => {
+                    const searchTerms = searchQuery.split(' ')
+                    for (let i = 0; i < searchTerms.length; i++) {
+                      if ( post.title.toLowerCase().includes(searchTerms[i].toLowerCase()) )
+                        return true
+                    }
+                  })
+                  .map(post => (
+                    <PostList
+                      key={post._id}
+                      post={post}
+                      aspect="landscape"
+                    />
+                ))}
             </div>
-            <div className="grid gap-10 mt-10 lg:gap-10 md:grid-cols-2 xl:grid-cols-3 ">
-              {posts.slice(2).map(post => (
-                <PostList
-                  key={post._id}
-                  post={post}
-                  aspect="square"
-                />
-              ))}
-            </div>
+            }
           </Container>
         </Layout>
       )}

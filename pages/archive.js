@@ -12,9 +12,11 @@ import defaultOG from "../public/img/opengraph.jpg";
 import { postquery, configQuery } from "@lib/groq";
 import GetImage from "@utils/getImage";
 import PostList from "@components/postlist";
+import { useSearchContext } from "context/searchContext";
 
 export default function Post(props) {
   const { postdata, siteconfig, preview } = props;
+  const { searchQuery } = useSearchContext()
 
   const router = useRouter();
   //console.log(router.query.category);
@@ -67,15 +69,34 @@ export default function Post(props) {
                 See all posts we have ever written.
               </p>
             </div>
-            <div className="grid gap-10 mt-10 lg:gap-10 md:grid-cols-2 xl:grid-cols-3 ">
-              {posts.map(post => (
-                <PostList
-                  key={post._id}
-                  post={post}
-                  aspect="square"
-                />
-              ))}
+            { searchQuery == '' ? 
+              <div className="grid gap-10 mt-10 lg:gap-10 md:grid-cols-2 xl:grid-cols-3 ">
+                {posts.map(post => (
+                  <PostList
+                    key={post._id}
+                    post={post}
+                    aspect="landscape"
+                  />
+                ))}
+              </div> :
+              <div className="grid gap-10 mt-10 lg:gap-10 md:grid-cols-2 xl:grid-cols-3 ">
+                {posts
+                  .filter((post) => {
+                    const searchTerms = searchQuery.split(' ')
+                    for (let i = 0; i < searchTerms.length; i++) {
+                      if ( post.title.toLowerCase().includes(searchTerms[i].toLowerCase()) )
+                        return true
+                    }
+                  })
+                  .map(post => (
+                    <PostList
+                      key={post._id}
+                      post={post}
+                      aspect="landscape"
+                    />
+                ))}
             </div>
+            }
           </Container>
         </Layout>
       )}

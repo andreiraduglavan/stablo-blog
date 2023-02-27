@@ -1,16 +1,21 @@
-import React from "react";
+import React, { useState } from "react";
 import { Disclosure } from "@headlessui/react";
 import Container from "@components/container";
 import Link from "next/link";
 import Image from "next/image";
 import GetImage from "@utils/getImage";
-import { myLoader } from "@utils/all";
+import { AiOutlineClose } from "react-icons/ai"
+import { useSearchContext } from "context/searchContext";
 
 export default function Navbar(props) {
   const leftmenu = [
     {
       label: "Home",
       href: "/"
+    },
+    {
+      label: "Categories",
+      href: "/categories"
     },
     {
       label: "About",
@@ -29,6 +34,9 @@ export default function Navbar(props) {
     }
   ];
 
+  const [isSearchOpen, setIsSearchOpen] = useState(false)
+  const { searchQuery, setSearchQuery } = useSearchContext()
+
   const mobilemenu = [...leftmenu, ...rightmenu];
 
   return (
@@ -37,7 +45,7 @@ export default function Navbar(props) {
         <Disclosure>
           {({ open }) => (
             <>
-              <div className="flex flex-wrap justify-between md:gap-10 md:flex-nowrap">
+              <div className="flex flex-wrap justify-between md:gap-10 md:flex-nowrap z-50">
                 <div className="flex-col items-center justify-start order-1 hidden w-full md:flex md:flex-row md:justify-end md:w-auto md:order-none md:flex-1">
                   {leftmenu.map((item, index) => (
                     <Link href={item.href} key={index}>
@@ -120,6 +128,32 @@ export default function Navbar(props) {
                       </a>
                     </Link>
                   ))}
+                  { isSearchOpen ?
+                    <div className="relative flex flex-row items-center">
+                      <div className="relative">
+                        <input 
+                          type="text" 
+                          placeholder="Search" 
+                          name="q" 
+                          id="q" 
+                          value={searchQuery}
+                          onChange={(e) => setSearchQuery(e.target.value) }
+                          className="w-full px-3 py-2 border rounded-md outline-none focus:border-gray-300 focus:shadow-sm dark:bg-gray-900 dark:border-gray-600 dark:focus:border-white"
+                        />
+                        <div className="absolute inset-y-0 right-0 z-20 flex items-center pr-3 pointer-events-none">
+                          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" aria-hidden="true" className="w-4 h-4 text-gray-400"><path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                        </div>
+                      </div>
+                      
+                      <AiOutlineClose size={16} className='text-gray-600 dark:text-gray-400 ml-2 cursor-pointer' onClick={() => setIsSearchOpen(false)} />
+                    </div> :
+                    <button
+                      className="px-5 py-2 text-lg font-medium text-gray-600 dark:text-gray-400 dark:hover:text-blue-500 hover:text-blue-500"
+                      onClick={() => setIsSearchOpen(true) }
+                    >
+                      <span>Search</span>
+                    </button>
+                  }
                 </div>
               </div>
               <Disclosure.Panel>
@@ -127,13 +161,39 @@ export default function Navbar(props) {
                   { mobilemenu.map((item, index) => (
                     <Link href={item.href} key={index}>
                       <a
-                        className="px-5 py-2 text-sm font-medium text-gray-500 hover:text-blue-500"
+                        className="px-5 py-2 text-sm font-medium text-gray-500 dark:text-gray-400 hover:text-blue-500"
                         target={item.external ? "_blank" : ""}
                         rel={item.external ? "noopener" : ""} >
                         {item.label}
                       </a>
                     </Link>
                   ))}
+                  { isSearchOpen ?
+                    <div className="relative flex flex-row items-center">
+                      <div className="relative">
+                        <input 
+                          type="text" 
+                          placeholder="Search" 
+                          name="q" 
+                          id="q" 
+                          value={searchQuery}
+                          onChange={(e) => setSearchQuery(e.target.value) }
+                          className="w-full px-3 py-2 text-sm border rounded-md outline-none focus:border-gray-300 focus:shadow-sm dark:bg-gray-900 dark:border-gray-600 dark:focus:border-white"
+                        />
+                        <div className="absolute inset-y-0 right-0 z-20 flex items-center pr-3 pointer-events-none">
+                          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" aria-hidden="true" className="w-4 h-4 text-gray-400"><path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                        </div>
+                      </div>
+                      
+                      <AiOutlineClose size={16} className='text-gray-600 dark:text-gray-400 ml-2 cursor-pointer' onClick={() => setIsSearchOpen(false)} />
+                    </div> :
+                    <button
+                      className="px-5 py-2 text-sm font-medium text-gray-500 dark:text-gray-400 hover:text-blue-500"
+                      onClick={() => setIsSearchOpen(true) }
+                    >
+                      <span>Search</span>
+                    </button>
+                  }
                 </div>
               </Disclosure.Panel>
             </>

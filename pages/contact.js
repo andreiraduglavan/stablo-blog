@@ -10,10 +10,12 @@ import {
   MailIcon,
   PhoneIcon
 } from "@heroicons/react/outline";
+import { Spinner } from "react-activity";
+import "react-activity/dist/library.css";
+
 export default function Contact({ siteconfig }) {
   const {
     register,
-    handleSubmit,
     reset,
     watch,
     control,
@@ -22,25 +24,40 @@ export default function Contact({ siteconfig }) {
   } = useForm({
     mode: "onTouched"
   });
-  const [isSuccess, setIsSuccess] = useState(false);
-  const [message, setMessage] = useState(false);
+  
+  const [isSuccess, setIsSuccess] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
+  const [name, setName] = useState('')
+  const [email, setEmail] = useState('')
+  const [message, setMessage] = useState('')
+  const [error, setError] = useState(null)
   // Please update the Access Key in the Sanity CMS - Site Congig Page
   const apiKey = siteconfig?.w3ckey || "YOUR_ACCESS_KEY_HERE";
 
-  const { submit: onSubmit } = useWeb3Forms({
-    apikey: apiKey,
-    from_name: "Stablo Template",
-    subject: "New Contact Message from Stablo Website",
-    onSuccess: (msg, data) => {
-      setIsSuccess(true);
-      setMessage(msg);
-      reset();
-    },
-    onError: (msg, data) => {
-      setIsSuccess(false);
-      setMessage(msg);
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    setError(null)
+    setIsSuccess(false)
+    setIsLoading(true)
+    const data = {name, email, message }
+
+    try {
+      await fetch(
+        '/api/send',
+        { method: 'POST',
+          headers:{
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(data) 
+        }
+      )
+      setIsSuccess(true)
+    } catch (e) {
+      console.log(e)
+      setError(true)
     }
-  });
+    setIsLoading(false)
+  }
 
   return (
     <Layout {...siteconfig}>
@@ -86,8 +103,9 @@ export default function Contact({ siteconfig }) {
             </div>
           </div>
           <div>
-            <form onSubmit={handleSubmit(onSubmit)} className="my-10">
+            <form onSubmit={handleSubmit} className="my-10">
               <input
+                value
                 type="checkbox"
                 id=""
                 className="hidden"
@@ -97,6 +115,8 @@ export default function Contact({ siteconfig }) {
               <div className="mb-5">
                 <input
                   type="text"
+                  required
+                  onChange={(e) => setName(e.target.value)}
                   placeholder="Full Name"
                   autoComplete="false"
                   className={`w-full px-4 py-3 border-2 placeholder:text-gray-800 dark:text-white rounded-md outline-none dark:placeholder:text-gray-200 dark:bg-gray-900   focus:ring-4  ${
@@ -104,10 +124,7 @@ export default function Contact({ siteconfig }) {
                       ? "border-red-600 focus:border-red-600 ring-red-100 dark:ring-0"
                       : "border-gray-300 focus:border-gray-600 ring-gray-100 dark:border-gray-600 dark:focus:border-white dark:ring-0"
                   }`}
-                  {...register("name", {
-                    required: "Full name is required",
-                    maxLength: 80
-                  })}
+                  
                 />
                 {errors.name && (
                   <div className="mt-1 text-red-600">
@@ -122,6 +139,8 @@ export default function Contact({ siteconfig }) {
                 </label>
                 <input
                   id="email_address"
+                  required
+                  onChange={(e) => setEmail(e.target.value)}
                   type="email"
                   placeholder="Email Address"
                   name="email"
@@ -131,13 +150,6 @@ export default function Contact({ siteconfig }) {
                       ? "border-red-600 focus:border-red-600 ring-red-100 dark:ring-0"
                       : "border-gray-300 focus:border-gray-600 ring-gray-100 dark:border-gray-600 dark:focus:border-white dark:ring-0"
                   }`}
-                  {...register("email", {
-                    required: "Enter your email",
-                    pattern: {
-                      value: /^\S+@\S+$/i,
-                      message: "Please enter a valid email"
-                    }
-                  })}
                 />
                 {errors.email && (
                   <div className="mt-1 text-red-600">
@@ -149,15 +161,13 @@ export default function Contact({ siteconfig }) {
               <div className="mb-3">
                 <textarea
                   name="message"
+                  onChange={(e) => setMessage(e.target.value)}
                   placeholder="Your Message"
                   className={`w-full px-4 py-3 border-2 placeholder:text-gray-800 dark:text-white dark:placeholder:text-gray-200 dark:bg-gray-900   rounded-md outline-none  h-36 focus:ring-4  ${
                     errors.message
                       ? "border-red-600 focus:border-red-600 ring-red-100 dark:ring-0"
                       : "border-gray-300 focus:border-gray-600 ring-gray-100 dark:border-gray-600 dark:focus:border-white dark:ring-0"
                   }`}
-                  {...register("message", {
-                    required: "Enter your Message"
-                  })}
                 />
                 {errors.message && (
                   <div className="mt-1 text-red-600">
@@ -194,14 +204,20 @@ export default function Contact({ siteconfig }) {
               </button>
             </form>
 
-            {isSubmitSuccessful && isSuccess && (
+            { isSuccess && (
               <div className="mt-3 text-sm text-center text-green-500">
                 {"Message sent successfully. Thank you for your feedback."}
               </div>
             )}
-            {isSubmitSuccessful && !isSuccess && (
+            {error && (
               <div className="mt-3 text-sm text-center text-red-500">
-                {message || "Something went wrong. Please try later."}
+                { "Something went wrong. Please try later."}
+              </div>
+            )}
+
+            {isLoading && (
+              <div className="flex item-center justify-center mt-3">
+                <Spinner />
               </div>
             )}
           </div>

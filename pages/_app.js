@@ -2,10 +2,11 @@ import { ThemeProvider } from "next-themes";
 import Script from "next/script";
 import "../css/tailwind.css";
 import { Analytics } from '@vercel/analytics/react';
+import { SearchContext } from "context/searchContext";
 
 function MyApp({ Component, pageProps }) {
   return (
-    <>
+    <SearchContext>
       {/* <Script
         id="Adsense-id"
         data-ad-client="ca-pub-5000031567742123"
@@ -19,7 +20,7 @@ function MyApp({ Component, pageProps }) {
         <Component {...pageProps} />
       </ThemeProvider>
       <Analytics />
-    </>
+    </SearchContext>
   );
 }
 
