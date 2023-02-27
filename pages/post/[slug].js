@@ -196,7 +196,7 @@ export default function Post(props) {
                 <PostList
                   key={post._id}
                   post={post}
-                  aspect="square"
+                  aspect="landscape" 
                 />
               ))}
             </div>
