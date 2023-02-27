@@ -54,8 +54,8 @@ export default function Layout(props) {
 
       <div className="antialiased text-gray-800 dark:bg-black dark:text-gray-400 flex flex-col min-h-screen">
         <div aria-hidden="true" className="absolute inset-0 grid grid-cols-2 -space-x-52 opacity-40 dark:opacity-20 -z-50">
-          <div className="blur-[106px] h-32 bg-gradient-to-br from-emerald-800 to-emerald-400 dark:from-blue-300"></div>
-          <div className="blur-[106px] h-56 bg-gradient-to-r from-blue-800 to-blue-400 dark:to-indigo-400"></div>
+          <div className="blur-[106px] h-32 bg-gradient-to-br from-red-800 to-red-600 dark:from-red-300"></div>
+          <div className="blur-[106px] h-56 bg-gradient-to-r from-red-800 to-red-600 dark:to-red-400"></div>
         </div>
         <div className="grow">
           <Navbar {...props} />
