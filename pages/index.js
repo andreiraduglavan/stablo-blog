@@ -20,7 +20,7 @@ export default function Post(props) {
 
   const router = useRouter();
   //console.log(router.query.category);
-
+  //
   const { data: posts } = usePreviewSubscription(postquery, {
     initialData: postdata,
     enabled: preview || router.query.preview !== undefined
