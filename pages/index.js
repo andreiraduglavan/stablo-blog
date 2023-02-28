@@ -178,9 +178,6 @@ export default function Post(props) {
                     />
                   ))}
                 </div>
-                <div className="flex justify-center items-center mb-8 mt-12">
-                  <h1 className="text-2xl"><span className="font-semibold">Our</span> Latest</h1>
-                </div>
                 <div className="grid gap-10 mt-10 lg:gap-10 md:grid-cols-2 xl:grid-cols-3 ">
                   {posts.filter(post => post.featured).slice(3).map(post => (
                     <PostList
@@ -189,6 +186,9 @@ export default function Post(props) {
                       aspect="landscape"
                     />
                   ))}
+                </div>
+                <div className="flex justify-center items-center mb-8 mt-12">
+                  <h1 className="text-2xl"><span className="font-semibold">Our</span> Latest</h1>
                 </div>
                 <div className="grid gap-10 mt-10 lg:gap-10 md:grid-cols-2 xl:grid-cols-3 ">
                   {posts.filter(post => !post.featured).map(post => (
