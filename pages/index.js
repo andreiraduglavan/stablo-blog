@@ -25,7 +25,9 @@ export default function Post(props) {
     initialData: postdata,
     enabled: preview || router.query.preview !== undefined
   });
-  const mainPost = posts.find(post => post.featured)
+
+  const mainPost = posts.find(post => post.slug.current == "why-your-shopify-store-needs-a-mobile-app-the-numbers-benefits-and-convenience") || posts.find(post => post.featured)
+
   const imageProps = posts[0]?.mainImage
     ? GetImage(posts[0].mainImage)
     : null;
