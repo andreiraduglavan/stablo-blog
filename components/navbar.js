@@ -49,7 +49,7 @@ export default function Navbar(props) {
                 <div className="flex-col items-center justify-start order-1 hidden w-full md:flex md:flex-row md:justify-end md:w-auto md:order-none md:flex-1">
                   {leftmenu.map((item, index) => (
                     <Link href={item.href} key={index}>
-                      <a className="px-5 py-2 text-lg font-medium text-gray-600 dark:text-gray-400 hover:text-red-500">
+                      <a className="px-5 py-2 text-lg font-medium text-gray-600 dark:text-gray-400 hover:text-green-400">
                         {item.label}
                       </a>
                     </Link>
@@ -90,7 +90,7 @@ export default function Navbar(props) {
                   </Link>
                   <Disclosure.Button
                     aria-label="Toggle Menu"
-                    className="px-2 py-1 ml-auto text-gray-500 rounded-md md:hidden focus:text-red-500 focus:outline-none dark:text-gray-300 ">
+                    className="px-2 py-1 ml-auto text-gray-500 rounded-md md:hidden focus:text-green-400 focus:outline-none dark:text-gray-300 ">
                     <svg
                       className="w-6 h-6 fill-current"
                       xmlns="http://www.w3.org/2000/svg"
@@ -116,7 +116,7 @@ export default function Navbar(props) {
                   {rightmenu.map((item, index) => (
                     <Link href={item.href} key={index}>
                       <a
-                        className="px-5 py-2 text-lg font-medium text-gray-600 dark:text-gray-400 dark:hover:text-red-500 hover:text-red-500"
+                        className="px-5 py-2 text-lg font-medium text-gray-600 dark:text-gray-400 dark:hover:text-green-400 hover:text-green-400"
                         target={item.external ? "_blank" : ""}
                         rel={item.external ? "noopener" : ""}>
                         <span> {item.label}</span>
@@ -148,7 +148,7 @@ export default function Navbar(props) {
                       <AiOutlineClose size={16} className='text-gray-600 dark:text-gray-400 ml-2 cursor-pointer' onClick={() => setIsSearchOpen(false)} />
                     </div> :
                     <button
-                      className="px-5 py-2 text-lg font-medium text-gray-600 dark:text-gray-400 dark:hover:text-red-500 hover:text-red-500"
+                      className="px-5 py-2 text-lg font-medium text-gray-600 dark:text-gray-400 dark:hover:text-green-400 hover:text-green-400"
                       onClick={() => setIsSearchOpen(true) }
                     >
                       <span>Search</span>
@@ -161,7 +161,7 @@ export default function Navbar(props) {
                   { mobilemenu.map((item, index) => (
                     <Link href={item.href} key={index}>
                       <a
-                        className="px-5 py-2 text-sm font-medium text-gray-500 dark:text-gray-400 hover:text-red-500"
+                        className="px-5 py-2 text-sm font-medium text-gray-500 dark:text-gray-400 hover:text-green-400"
                         target={item.external ? "_blank" : ""}
                         rel={item.external ? "noopener" : ""} >
                         {item.label}
@@ -188,7 +188,7 @@ export default function Navbar(props) {
                       <AiOutlineClose size={16} className='text-gray-600 dark:text-gray-400 ml-2 cursor-pointer' onClick={() => setIsSearchOpen(false)} />
                     </div> :
                     <button
-                      className="px-5 py-2 text-sm font-medium text-gray-500 dark:text-gray-400 hover:text-red-500"
+                      className="px-5 py-2 text-sm font-medium text-gray-500 dark:text-gray-400 hover:text-green-400"
                       onClick={() => setIsSearchOpen(true) }
                     >
                       <span>Search</span>
